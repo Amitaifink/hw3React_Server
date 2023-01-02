@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GroupAmitaiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Ingredients">
+          <Key>
+            <PropertyRef Name="ingredientsId" />
+          </Key>
+          <Property Name="ingredientsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ingredientName" Type="nvarchar" MaxLength="50" />
+          <Property Name="imgUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="calories" Type="int" />
+        </EntityType>
+        <EntityType Name="IngredientsInRecipes">
+          <Key>
+            <PropertyRef Name="recipeId" />
+            <PropertyRef Name="ingredientId" />
+          </Key>
+          <Property Name="recipeId" Type="int" Nullable="false" />
+          <Property Name="ingredientId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Recipes">
+          <Key>
+            <PropertyRef Name="recipesId" />
+          </Key>
+          <Property Name="recipesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="recipesName" Type="nvarchar" MaxLength="50" />
+          <Property Name="imageUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="cookingMethod" Type="nvarchar" MaxLength="500" />
+          <Property Name="time" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK__Ingredien__ingre__29572725">
+          <End Role="Ingredients" Type="Self.Ingredients" Multiplicity="1" />
+          <End Role="IngredientsInRecipes" Type="Self.IngredientsInRecipes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredients">
+              <PropertyRef Name="ingredientsId" />
+            </Principal>
+            <Dependent Role="IngredientsInRecipes">
+              <PropertyRef Name="ingredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingredien__recip__286302EC">
+          <End Role="Recipes" Type="Self.Recipes" Multiplicity="1" />
+          <End Role="IngredientsInRecipes" Type="Self.IngredientsInRecipes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipes">
+              <PropertyRef Name="recipesId" />
+            </Principal>
+            <Dependent Role="IngredientsInRecipes">
+              <PropertyRef Name="recipeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GroupAmitaiModelStoreContainer">
+          <EntitySet Name="Ingredients" EntityType="Self.Ingredients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IngredientsInRecipes" EntityType="Self.IngredientsInRecipes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Recipes" EntityType="Self.Recipes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Ingredien__ingre__29572725" Association="Self.FK__Ingredien__ingre__29572725">
+            <End Role="Ingredients" EntitySet="Ingredients" />
+            <End Role="IngredientsInRecipes" EntitySet="IngredientsInRecipes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingredien__recip__286302EC" Association="Self.FK__Ingredien__recip__286302EC">
+            <End Role="Recipes" EntitySet="Recipes" />
+            <End Role="IngredientsInRecipes" EntitySet="IngredientsInRecipes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GroupAmitaiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="ingredientsId" />
+          </Key>
+          <Property Name="ingredientsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ingredientName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="imgUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="calories" Type="Int32" />
+          <NavigationProperty Name="Recipes" Relationship="Self.IngredientsInRecipes" FromRole="Ingredients" ToRole="Recipes" />
+        </EntityType>
+        <EntityType Name="Recipe">
+          <Key>
+            <PropertyRef Name="recipesId" />
+          </Key>
+          <Property Name="recipesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="recipesName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="imageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="cookingMethod" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="Int32" />
+          <NavigationProperty Name="Ingredients" Relationship="Self.IngredientsInRecipes" FromRole="Recipes" ToRole="Ingredients" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="IngredientsInRecipes">
+          <End Role="Ingredients" Type="Self.Ingredient" Multiplicity="*" />
+          <End Role="Recipes" Type="Self.Recipe" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="GroupAmitaiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Ingredients" EntityType="Self.Ingredient" />
+          <EntitySet Name="Recipes" EntityType="Self.Recipe" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="IngredientsInRecipes" Association="Self.IngredientsInRecipes">
+            <End Role="Ingredients" EntitySet="Ingredients" />
+            <End Role="Recipes" EntitySet="Recipes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GroupAmitaiModelStoreContainer" CdmEntityContainer="GroupAmitaiEntities">
+          <EntitySetMapping Name="Ingredients">
+            <EntityTypeMapping TypeName="GroupAmitaiModel.Ingredient">
+              <MappingFragment StoreEntitySet="Ingredients">
+                <ScalarProperty Name="ingredientsId" ColumnName="ingredientsId" />
+                <ScalarProperty Name="ingredientName" ColumnName="ingredientName" />
+                <ScalarProperty Name="imgUrl" ColumnName="imgUrl" />
+                <ScalarProperty Name="calories" ColumnName="calories" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recipes">
+            <EntityTypeMapping TypeName="GroupAmitaiModel.Recipe">
+              <MappingFragment StoreEntitySet="Recipes">
+                <ScalarProperty Name="recipesId" ColumnName="recipesId" />
+                <ScalarProperty Name="recipesName" ColumnName="recipesName" />
+                <ScalarProperty Name="imageUrl" ColumnName="imageUrl" />
+                <ScalarProperty Name="cookingMethod" ColumnName="cookingMethod" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GroupAmitaiModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="IngredientsInRecipes" TypeName="GroupAmitaiModel.IngredientsInRecipes" StoreEntitySet="IngredientsInRecipes">
+            <EndProperty Name="Ingredients">
+              <ScalarProperty Name="ingredientsId" ColumnName="ingredientId" />
+            </EndProperty>
+            <EndProperty Name="Recipes">
+              <ScalarProperty Name="recipesId" ColumnName="recipeId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
